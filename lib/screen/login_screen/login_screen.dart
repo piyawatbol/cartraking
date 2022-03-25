@@ -24,22 +24,21 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController user_name = TextEditingController();
   TextEditingController pass_word = TextEditingController();
   Future login() async {
-    var url = Uri.parse('http://${ipconnect}/cartraking/login/register.php');
+    var url = Uri.parse('http://${ipconnect}/cartraking/login/login.php');
     var response = await http.post(url, body: {
-      "name": user_name.text,
-      "phone": pass_word.text,
+      "user_name": user_name.text,
+      "pass_word": pass_word.text,
     });
     var data = json.decode(response.body);
-    print(data.toString());
-    if (data == 'login') {
+    print(data);
+    if (data == "login") {
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) {
         return MenuScreen();
       }));
-    }
-    if (data == 'miss') {
+    } else {
       Fluttertoast.showToast(
-          msg: "User or Password Miss",
+          msg: "ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -139,6 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           TextFormField(
+                              obscureText: true,
                               controller: pass_word,
                               validator: (value) {
                                 if (value!.isEmpty) {
