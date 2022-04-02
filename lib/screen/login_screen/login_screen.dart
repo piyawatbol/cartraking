@@ -20,15 +20,63 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  //ตกแต่งขอบของตัว input
+  final inputstyle = InputDecoration(
+    contentPadding: EdgeInsets.symmetric(horizontal: 35),
+    fillColor: Colors.white,
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        width: 3,
+        color: Colors.white,
+      ),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 3,
+      ),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 3,
+      ),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.red,
+        width: 3,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        width: 3,
+        color: Colors.red,
+      ),
+    ),
+  );
   final formKey = GlobalKey<FormState>();
   TextEditingController user_name = TextEditingController();
   TextEditingController pass_word = TextEditingController();
+  Future getdata() async {
+    var url = Uri.parse('http://${ipconnect}/cartraking/login/getdata.php');
+    var response = await http.post(url);
+    var data = json.decode(response.body);
+    print(data);
+  }
+
   Future login() async {
     var url = Uri.parse('http://${ipconnect}/cartraking/login/login.php');
     var response = await http.post(url, body: {
       "user_name": user_name.text,
       "pass_word": pass_word.text,
     });
+
     var data = json.decode(response.body);
     print(data);
     if (data == "login") {
@@ -95,7 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
                             child: Text(
                               "ชื่อผู้ใช้",
                               style: GoogleFonts.poppins(
@@ -104,30 +154,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           TextFormField(
-                              controller: user_name,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return ('กรุณากรอกชื่อผู้ใช้งาน');
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                    width: 5,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: 5,
-                                  ),
-                                ),
-                              )),
+                            controller: user_name,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return ('กรุณากรอกชื่อผู้ใช้งาน');
+                              }
+                              return null;
+                            },
+                            decoration: inputstyle,
+                          ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
@@ -146,23 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                                 return null;
                               },
-                              decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                    width: 5,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: 5,
-                                  ),
-                                ),
-                              )),
+                              decoration: inputstyle),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(

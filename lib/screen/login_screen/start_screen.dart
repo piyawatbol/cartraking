@@ -14,8 +14,10 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  final textstyle1 = TextStyle(fontSize: 100, color: Colors.yellow);
-  final textstyle2 = TextStyle(fontSize: 100, color: Colors.white);
+  final textstyle1 = GoogleFonts.bebasNeue(
+      textStyle: TextStyle(fontSize: 100, color: Colors.yellow));
+  final textstyle2 = GoogleFonts.bebasNeue(
+      textStyle: TextStyle(fontSize: 100, color: Colors.white));
   final left = 50;
   @override
   Widget build(BuildContext context) {
@@ -43,15 +45,14 @@ class _StartScreenState extends State<StartScreen> {
         Positioned(
           top: 120,
           left: double.parse(left.toString()),
-          child:
-              Text("BSRU", style: GoogleFonts.bebasNeue(textStyle: textstyle1)),
+          child: Text("BSRU", style: textstyle1),
         ),
         Positioned(
           top: 190,
           left: double.parse(left.toString()),
           child: Text(
             'CAR',
-            style: GoogleFonts.bebasNeue(textStyle: textstyle2),
+            style: textstyle2,
           ),
         ),
         Positioned(
@@ -59,7 +60,7 @@ class _StartScreenState extends State<StartScreen> {
           left: double.parse(left.toString()),
           child: Text(
             'TRACKING',
-            style: GoogleFonts.bebasNeue(textStyle: textstyle2),
+            style: textstyle2,
           ),
         ),
         Positioned(
@@ -67,7 +68,7 @@ class _StartScreenState extends State<StartScreen> {
           left: double.parse(left.toString()),
           child: Text(
             'SYSTEM',
-            style: GoogleFonts.bebasNeue(textStyle: textstyle2),
+            style: textstyle2,
           ),
         ),
         Positioned(

@@ -1,21 +1,58 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, sized_box_for_whitespace, unused_import, avoid_print, non_constant_identifier_names, unnecessary_brace_in_string_interps, unused_local_variable
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'dart:convert';
-
 import 'package:cartrackingapp/ipconnect.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'success_screen.dart';
-
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key? key}) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
-
 class _RegisterScreenState extends State<RegisterScreen> {
+  final inputstyle = InputDecoration(
+    contentPadding: EdgeInsets.symmetric(horizontal: 35),
+    fillColor: Colors.white,
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        width: 3,
+        color: Colors.white,
+      ),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 3,
+      ),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 3,
+      ),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.red,
+        width: 3,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        width: 3,
+        color: Colors.red,
+      ),
+    ),
+  );
   final formKey = GlobalKey<FormState>();
   TextEditingController name = TextEditingController();
   TextEditingController phone = TextEditingController();
@@ -33,7 +70,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
     var data = json.decode(response.body);
     print(data.toString());
-    if (data == 'succes') {
+    if (data == 'duplicate_username') {
+      Fluttertoast.showToast(
+          msg: "ชื่อผู้ใช้นี้ได้ถูกใช้ไปแล้ว",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else if (data == 'duplicate_email') {
+      Fluttertoast.showToast(
+          msg: "email นี้ถูกใช้ไปแล้ว",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else if (data == 'succes') {
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) {
         return SuccessScreen();
@@ -58,19 +113,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 25,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
             child: SafeArea(
               child: Container(
                 width: double.infinity,
-                height: 800,
+                height: 780,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 30,
+                      height: 40,
                     ),
                     Text(
                       "สร้างบัญชีผู้ใช้",
@@ -81,7 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fontWeight: FontWeight.bold)),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 35,
                     ),
                     Form(
                         key: formKey,
@@ -91,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Text(
-                                "ชื่อผู้ใช้งาน",
+                                "ชื่อ",
                                 style: GoogleFonts.poppins(
                                     textStyle: TextStyle(
                                         color: Colors.white, fontSize: 18)),
@@ -105,22 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   return null;
                                 },
                                 controller: name,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 5,
-                                    ),
-                                  ),
-                                )),
+                                decoration: inputstyle),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Text(
@@ -138,22 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   }
                                   return null;
                                 },
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 5,
-                                    ),
-                                  ),
-                                )),
+                                decoration: inputstyle),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Text(
@@ -171,26 +194,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   }
                                   return null;
                                 },
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 5,
-                                    ),
-                                  ),
-                                )),
+                                decoration: inputstyle),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Text(
-                                "username",
+                                "ชื่อผู้ใช้งาน",
                                 style: GoogleFonts.poppins(
                                     textStyle: TextStyle(
                                         color: Colors.white, fontSize: 18)),
@@ -204,22 +212,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   }
                                   return null;
                                 },
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 5,
-                                    ),
-                                  ),
-                                )),
+                                decoration: inputstyle),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Text(
@@ -235,27 +228,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   if (value!.isEmpty) {
                                     return ('กรุณากรอกรหัสผ่าน');
                                   }
+                                  if (value.length <= 5) {
+                                    return ('กรุณาใส่รหัสผ่าน 6 ตัวขึ้นไป');
+                                  }
                                   return null;
                                 },
                                 controller: pass_word,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 5,
-                                    ),
-                                  ),
-                                )),
+                                decoration: inputstyle),
                             SizedBox(
-                              height: 40,
+                              height: 25,
                             ),
                           ],
                         )),

@@ -12,6 +12,45 @@ class ForgetEmail extends StatefulWidget {
 }
 
 class _ForgetEmailState extends State<ForgetEmail> {
+  final inputstyle = InputDecoration(
+    contentPadding: EdgeInsets.symmetric(horizontal: 35),
+    fillColor: Colors.white,
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        width: 3,
+        color: Colors.white,
+      ),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 3,
+      ),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 3,
+      ),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.red,
+        width: 3,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        width: 3,
+        color: Colors.red,
+      ),
+    ),
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,24 +99,7 @@ class _ForgetEmailState extends State<ForgetEmail> {
                                   TextStyle(color: Colors.white, fontSize: 18)),
                         ),
                       ),
-                      TextFormField(
-                          decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40),
-                          borderSide: BorderSide(
-                            width: 5,
-                            color: Colors.white,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40),
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 5,
-                          ),
-                        ),
-                      )),
+                      TextFormField(decoration: inputstyle),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Text(
@@ -87,24 +109,7 @@ class _ForgetEmailState extends State<ForgetEmail> {
                                   TextStyle(color: Colors.white, fontSize: 18)),
                         ),
                       ),
-                      TextFormField(
-                          decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40),
-                          borderSide: BorderSide(
-                            width: 5,
-                            color: Colors.white,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40),
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 5,
-                          ),
-                        ),
-                      )),
+                      TextFormField(decoration: inputstyle),
                     ],
                   )),
                 ),
