@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
+import 'package:cartrackingapp/screen/map_screen/driver_map.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -43,7 +44,12 @@ class _DriverScreenState extends State<DriverScreen> {
                   height: 40,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return DriverMap();
+                    }));
+                  },
                   child: Container(
                     width: double.infinity,
                     height: 35,
@@ -65,6 +71,39 @@ class _DriverScreenState extends State<DriverScreen> {
                             ])),
                     child: Center(
                         child: Text("คันที่ 1",
+                            style: GoogleFonts.poppins(
+                                textStyle: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            )))),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    width: double.infinity,
+                    height: 35,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            blurRadius: 3,
+                            offset: Offset(2, 5), // Shadow position
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.orange.shade400,
+                              Colors.pink.shade400
+                            ])),
+                    child: Center(
+                        child: Text("คันที่ 2",
                             style: GoogleFonts.poppins(
                                 textStyle: TextStyle(
                               fontSize: 18,
