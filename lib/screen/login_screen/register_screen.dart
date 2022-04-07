@@ -7,12 +7,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'success_screen.dart';
+
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key? key}) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
+
 class _RegisterScreenState extends State<RegisterScreen> {
   final inputstyle = InputDecoration(
     contentPadding: EdgeInsets.symmetric(horizontal: 35),
@@ -88,6 +90,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+    } else if (data == 'duplicate_phone') {
+      Fluttertoast.showToast(
+          msg: "เบอร์โทรศัพท์ นี้ถูกใช้ไปแล้ว",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     } else if (data == 'succes') {
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) {
@@ -117,7 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: SafeArea(
               child: Container(
                 width: double.infinity,
-                height: 780,
+                height: 810,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,

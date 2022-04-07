@@ -1,6 +1,5 @@
 import 'package:cartrackingapp/screen/login_screen/start_screen.dart';
 import 'package:flutter/material.dart';
-
 void main() {
   runApp(const MyApp());
 }

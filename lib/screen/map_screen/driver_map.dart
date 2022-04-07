@@ -1,5 +1,5 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, unused_element, avoid_print
-
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, unused_element, avoid_print, unnecessary_new
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,7 +22,22 @@ class _DriverMapState extends State<DriverMap> {
   Future<Position?> _getLocation() async {
     userLocation = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
+
     return userLocation;
+  }
+
+  getDataRealTime() async {
+    Timer.periodic(new Duration(seconds: 10), (timer) async {
+      _getLocation();
+      print("userLocation ${userLocation!.latitude}");
+      // timer.cancel(); //ถ้าต้องการให้หยุดทำงาน
+    });
+  }
+
+  @override
+  void initState() {
+    getDataRealTime();
+    super.initState();
   }
 
   @override
@@ -38,12 +53,12 @@ class _DriverMapState extends State<DriverMap> {
               children: [
                 GoogleMap(
                     zoomControlsEnabled: false,
-                    myLocationButtonEnabled: false,
                     mapType: MapType.normal,
+                    myLocationButtonEnabled: false,
                     onMapCreated: _onMapCreated,
                     myLocationEnabled: true,
                     initialCameraPosition: CameraPosition(
-                        zoom: 17,
+                        zoom: 19,
                         target: LatLng(
                             userLocation!.latitude, userLocation!.longitude))),
                 Positioned(
@@ -67,6 +82,7 @@ class _DriverMapState extends State<DriverMap> {
                         GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
+                           
                           },
                           child: Icon(
                             Icons.arrow_back_ios_new,
@@ -99,13 +115,36 @@ class _DriverMapState extends State<DriverMap> {
               ],
             );
           } else {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CircularProgressIndicator(),
-                ],
-              ),
+            return Stack(
+              children: [
+                Positioned(
+                  left: 20,
+                  top: 80,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 1,
+                              offset: Offset(3, 3), // Shadow position
+                            ),
+                          ],
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Icon(Icons.arrow_back_ios_new),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
             );
           }
         },
@@ -113,7 +152,7 @@ class _DriverMapState extends State<DriverMap> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           mapController?.animateCamera(CameraUpdate.newLatLngZoom(
-              LatLng(userLocation!.latitude, userLocation!.longitude), 19));
+              LatLng(userLocation!.latitude, userLocation!.longitude), 20));
           // showDialog(
           //     context: context,
           //     builder: (context) {
@@ -128,7 +167,7 @@ class _DriverMapState extends State<DriverMap> {
           //           ),
           //         ),
           //       );
-          //  });
+          //     });
         },
         child: Icon(Icons.near_me),
       ),
