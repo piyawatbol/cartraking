@@ -1,8 +1,11 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, unused_element, avoid_print, unnecessary_new
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, unused_element, avoid_print, unnecessary_new, unused_local_variable, non_constant_identifier_names
 import 'dart:async';
+import 'package:cartrackingapp/screen/profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+import '../../ipconnect.dart';
 
 class DriverMap extends StatefulWidget {
   DriverMap({Key? key}) : super(key: key);
@@ -22,15 +25,25 @@ class _DriverMapState extends State<DriverMap> {
   Future<Position?> _getLocation() async {
     userLocation = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
-
     return userLocation;
   }
 
   getDataRealTime() async {
-    Timer.periodic(new Duration(seconds: 10), (timer) async {
+    Timer.periodic(new Duration(seconds: 15), (timer) async {
       _getLocation();
-      print("userLocation ${userLocation!.latitude}");
+      print("latitude ${userLocation!.latitude}");
+      print("longtitude ${userLocation!.longitude}");
+      insert_location();
       // timer.cancel(); //ถ้าต้องการให้หยุดทำงาน
+    });
+  }
+
+  Future insert_location() async {
+    var url =
+        Uri.parse('http://$ipconnect/cartraking/insert_location/insert_location.php');
+    var response = await http.post(url, body: {
+      "lati": userLocation!.latitude.toString(),
+      "longti": userLocation!.longitude.toString(),
     });
   }
 
@@ -82,7 +95,6 @@ class _DriverMapState extends State<DriverMap> {
                         GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
-                           
                           },
                           child: Icon(
                             Icons.arrow_back_ios_new,
@@ -103,10 +115,18 @@ class _DriverMapState extends State<DriverMap> {
                         SizedBox(
                           width: 10,
                         ),
-                        Icon(
-                          Icons.account_circle,
-                          color: Colors.white,
-                          size: 35,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return ProFileScreen();
+                            }));
+                          },
+                          child: Icon(
+                            Icons.account_circle,
+                            color: Colors.white,
+                            size: 35,
+                          ),
                         )
                       ],
                     ),

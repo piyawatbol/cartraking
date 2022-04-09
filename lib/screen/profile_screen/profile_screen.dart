@@ -1,9 +1,15 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, sized_box_for_whitespace, avoid_print, non_constant_identifier_names, unused_element, unnecessary_brace_in_string_interps, unused_local_variable
 // ignore_for_file: prefer_const_literals_to_create_immutables
+import 'dart:convert';
+
 import 'package:cartrackingapp/screen/login_screen/login_screen.dart';
 import 'package:cartrackingapp/screen/profile_screen/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../../ipconnect.dart';
 
 class ProFileScreen extends StatefulWidget {
   ProFileScreen({Key? key}) : super(key: key);
@@ -13,7 +19,40 @@ class ProFileScreen extends StatefulWidget {
 }
 
 class _ProFileScreenState extends State<ProFileScreen> {
+  String? user_id;
+  List dataList = [];
+  String? name;
+  String? phone;
+  String? email;
   final img = 'assets/images/profile.jpg';
+  Future get_user_id() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      user_id = preferences.getString('user_id');
+    });
+    print(user_id);
+    get_data_user();
+  }
+
+  Future get_data_user() async {
+    final response = await http.get(Uri.parse(
+        "http://$ipconnect/cartraking/login/get_data_user.php?user_id=$user_id"));
+    var data = json.decode(response.body);
+
+    setState(() {
+      dataList = data;
+    });
+    name = dataList[0]['name'];
+    phone = dataList[0]['phone'];
+    email = dataList[0]['email'];
+  }
+
+  @override
+  void initState() {
+    get_user_id();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,13 +92,14 @@ class _ProFileScreenState extends State<ProFileScreen> {
           ),
           Container(
             width: double.infinity,
+            height: 790,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 130,
+                    height: 110,
                   ),
                   Text(
                     "โปรไฟล์",
@@ -73,7 +113,7 @@ class _ProFileScreenState extends State<ProFileScreen> {
                     height: 20,
                   ),
                   Container(
-                    height: 490,
+                    height: 510,
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: Colors.grey.shade400,
@@ -88,7 +128,7 @@ class _ProFileScreenState extends State<ProFileScreen> {
                           ),
                         ),
                         Text(
-                          "ชื่อผู้ใช้งาน",
+                          'ชื่อ',
                           style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                                   fontSize: 26,
@@ -96,7 +136,7 @@ class _ProFileScreenState extends State<ProFileScreen> {
                                   fontWeight: FontWeight.bold)),
                         ),
                         Text(
-                          "xxxxxxxxxxxxxxxxx",
+                          name.toString(),
                           style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                             fontSize: 26,
@@ -112,7 +152,7 @@ class _ProFileScreenState extends State<ProFileScreen> {
                                   fontWeight: FontWeight.bold)),
                         ),
                         Text(
-                          "xxxxxxxxxxxxxxxxx",
+                          phone.toString(),
                           style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                             fontSize: 26,
@@ -128,19 +168,21 @@ class _ProFileScreenState extends State<ProFileScreen> {
                                   fontWeight: FontWeight.bold)),
                         ),
                         Text(
-                          "xxxxxxxx@gmail.com",
+                          email.toString(),
                           style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                             fontSize: 26,
                             color: Colors.black,
                           )),
                         ),
-                        SizedBox(height: 22),
+                        SizedBox(height: 35),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(
                                 builder: (BuildContext context) {
-                              return EditProfile();
+                              return EditProfile(
+                                user_id: user_id,
+                              );
                             }));
                           },
                           child: Container(
@@ -161,7 +203,7 @@ class _ProFileScreenState extends State<ProFileScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 25,
                   ),
                   GestureDetector(
                     onTap: () {

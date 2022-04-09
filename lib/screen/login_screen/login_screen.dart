@@ -6,10 +6,12 @@ import 'package:cartrackingapp/screen/forget_screen/forget_pass_screen.dart';
 import 'package:cartrackingapp/screen/login_screen/register_screen.dart';
 import 'package:cartrackingapp/screen/login_screen/start_screen.dart';
 import 'package:cartrackingapp/screen/menu_screen/menu_screnn.dart';
+import 'package:cartrackingapp/screen/profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../ipconnect.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -63,12 +65,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController user_name = TextEditingController();
   TextEditingController pass_word = TextEditingController();
-  Future getdata() async {
-    var url = Uri.parse('http://${ipconnect}/cartraking/login/getdata.php');
-    var response = await http.post(url);
-    var data = json.decode(response.body);
-    print(data);
-  }
 
   Future login() async {
     var url = Uri.parse('http://${ipconnect}/cartraking/login/login.php');
@@ -76,15 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
       "user_name": user_name.text,
       "pass_word": pass_word.text,
     });
-
     var data = json.decode(response.body);
-    print(data);
-    if (data == "login") {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) {
-        return MenuScreen();
-      }));
-    } else {
+    if (data == "miss") {
       Fluttertoast.showToast(
           msg: "ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง",
           toastLength: Toast.LENGTH_SHORT,
@@ -93,6 +82,13 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+    } else {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('user_id', data[0]['user_id']);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) {
+        return MenuScreen();
+      }));
     }
   }
 

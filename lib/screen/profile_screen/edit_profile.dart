@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors_in_immutables, sized_box_for_whitespace, non_constant_identifier_names, must_be_immutable
 //  prefer_const_constructors, sized_box_for_whitespace
 // ignore_for_file: prefer_const_literals_to_create_immutables
 // ignore_for_file: prefer_const_constructors
@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditProfile extends StatefulWidget {
-  EditProfile({Key? key}) : super(key: key);
+  String? user_id;
+  EditProfile({Key? key, required this.user_id}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -88,20 +89,26 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ),
                         Text(
-                          "ชื่อผู้ใช้งาน",
+                          "ชื่อ",
                           style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                                   fontSize: 26,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text(
-                          "xxxxxxxxxxxxxxxxx",
+                          widget.user_id.toString(),
                           style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                             fontSize: 26,
                             color: Colors.black,
                           )),
+                        ),
+                         SizedBox(
+                          height: 10,
                         ),
                         Text(
                           "เบอร์โทร",
@@ -111,6 +118,9 @@ class _EditProfileState extends State<EditProfile> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
                         ),
+                         SizedBox(
+                          height: 10,
+                        ),
                         Text(
                           "xxxxxxxxxxxxxxxxx",
                           style: GoogleFonts.montserrat(
@@ -119,6 +129,9 @@ class _EditProfileState extends State<EditProfile> {
                             color: Colors.black,
                           )),
                         ),
+                         SizedBox(
+                          height: 10,
+                        ),
                         Text(
                           "อีเมล",
                           style: GoogleFonts.montserrat(
@@ -126,6 +139,9 @@ class _EditProfileState extends State<EditProfile> {
                                   fontSize: 26,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
+                        ),
+                         SizedBox(
+                          height: 10,
                         ),
                         Text(
                           "xxxxxxxx@gmail.com",
