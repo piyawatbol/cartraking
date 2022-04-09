@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../ipconnect.dart';
 
 class DriverMap extends StatefulWidget {
@@ -17,9 +18,18 @@ class DriverMap extends StatefulWidget {
 class _DriverMapState extends State<DriverMap> {
   GoogleMapController? mapController;
   Position? userLocation;
+  String? user_id;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+  }
+
+  Future get_user_id() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      user_id = preferences.getString('user_id');
+    });
+    print(user_id);
   }
 
   Future<Position?> _getLocation() async {
@@ -33,15 +43,17 @@ class _DriverMapState extends State<DriverMap> {
       _getLocation();
       print("latitude ${userLocation!.latitude}");
       print("longtitude ${userLocation!.longitude}");
+      
       insert_location();
       // timer.cancel(); //ถ้าต้องการให้หยุดทำงาน
     });
   }
 
   Future insert_location() async {
-    var url =
-        Uri.parse('http://$ipconnect/cartraking/insert_location/insert_location.php');
+    var url = Uri.parse(
+        'http://$ipconnect/cartraking/insert_location/insert_location.php');
     var response = await http.post(url, body: {
+      "user_id": user_id.toString(),
       "lati": userLocation!.latitude.toString(),
       "longti": userLocation!.longitude.toString(),
     });
@@ -49,6 +61,7 @@ class _DriverMapState extends State<DriverMap> {
 
   @override
   void initState() {
+    get_user_id();
     getDataRealTime();
     super.initState();
   }

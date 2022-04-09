@@ -96,9 +96,6 @@ class _EditProfileState extends State<EditProfile> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
                         Text(
                           widget.user_id.toString(),
                           style: GoogleFonts.montserrat(
@@ -106,9 +103,6 @@ class _EditProfileState extends State<EditProfile> {
                             fontSize: 26,
                             color: Colors.black,
                           )),
-                        ),
-                         SizedBox(
-                          height: 10,
                         ),
                         Text(
                           "เบอร์โทร",
@@ -118,9 +112,6 @@ class _EditProfileState extends State<EditProfile> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
                         ),
-                         SizedBox(
-                          height: 10,
-                        ),
                         Text(
                           "xxxxxxxxxxxxxxxxx",
                           style: GoogleFonts.montserrat(
@@ -129,9 +120,6 @@ class _EditProfileState extends State<EditProfile> {
                             color: Colors.black,
                           )),
                         ),
-                         SizedBox(
-                          height: 10,
-                        ),
                         Text(
                           "อีเมล",
                           style: GoogleFonts.montserrat(
@@ -139,9 +127,6 @@ class _EditProfileState extends State<EditProfile> {
                                   fontSize: 26,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
-                        ),
-                         SizedBox(
-                          height: 10,
                         ),
                         Text(
                           "xxxxxxxx@gmail.com",

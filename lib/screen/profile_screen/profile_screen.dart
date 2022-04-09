@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, sized_box_for_whitespace, avoid_print, non_constant_identifier_names, unused_element, unnecessary_brace_in_string_interps, unused_local_variable
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, sized_box_for_whitespace, avoid_print, non_constant_identifier_names, unused_element, unnecessary_brace_in_string_interps, unused_local_variable, prefer_void_to_null
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'dart:convert';
 
@@ -45,6 +45,11 @@ class _ProFileScreenState extends State<ProFileScreen> {
     name = dataList[0]['name'];
     phone = dataList[0]['phone'];
     email = dataList[0]['email'];
+  }
+
+  Future<Null> logout() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
   }
 
   @override
@@ -135,6 +140,9 @@ class _ProFileScreenState extends State<ProFileScreen> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
                         ),
+                        SizedBox(
+                          height: 6,
+                        ),
                         Text(
                           name.toString(),
                           style: GoogleFonts.montserrat(
@@ -142,6 +150,9 @@ class _ProFileScreenState extends State<ProFileScreen> {
                             fontSize: 26,
                             color: Colors.black,
                           )),
+                        ),
+                        SizedBox(
+                          height: 6,
                         ),
                         Text(
                           "เบอร์โทร",
@@ -151,6 +162,9 @@ class _ProFileScreenState extends State<ProFileScreen> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
                         ),
+                        SizedBox(
+                          height: 6,
+                        ),
                         Text(
                           phone.toString(),
                           style: GoogleFonts.montserrat(
@@ -158,6 +172,9 @@ class _ProFileScreenState extends State<ProFileScreen> {
                             fontSize: 26,
                             color: Colors.black,
                           )),
+                        ),
+                        SizedBox(
+                          height: 6,
                         ),
                         Text(
                           "อีเมล",
@@ -167,6 +184,9 @@ class _ProFileScreenState extends State<ProFileScreen> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
                         ),
+                        SizedBox(
+                          height: 6,
+                        ),
                         Text(
                           email.toString(),
                           style: GoogleFonts.montserrat(
@@ -175,7 +195,7 @@ class _ProFileScreenState extends State<ProFileScreen> {
                             color: Colors.black,
                           )),
                         ),
-                        SizedBox(height: 35),
+                        SizedBox(height: 15),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(
@@ -207,6 +227,7 @@ class _ProFileScreenState extends State<ProFileScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      logout();
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (BuildContext context) {
                         return LoginScreen();
