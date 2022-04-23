@@ -33,7 +33,6 @@ class _ProFileScreenState extends State<ProFileScreen> {
     print(user_id);
     get_data_user();
   }
-
   Future get_data_user() async {
     final response = await http.get(Uri.parse(
         "http://$ipconnect/cartraking/login/get_data_user.php?user_id=$user_id"));
@@ -46,18 +45,15 @@ class _ProFileScreenState extends State<ProFileScreen> {
     phone = dataList[0]['phone'];
     email = dataList[0]['email'];
   }
-
   Future<Null> logout() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
   }
-
   @override
   void initState() {
     get_user_id();
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

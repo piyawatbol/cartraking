@@ -15,6 +15,45 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final img = 'assets/images/profile.jpg';
+  final inputstyle = InputDecoration(
+    contentPadding: EdgeInsets.symmetric(horizontal: 35),
+    fillColor: Colors.white,
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        width: 3,
+        color: Colors.white,
+      ),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 3,
+      ),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 3,
+      ),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        color: Colors.red,
+        width: 3,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide(
+        width: 3,
+        color: Colors.red,
+      ),
+    ),
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +99,7 @@ class _EditProfileState extends State<EditProfile> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 130,
+                    height: 100,
                   ),
                   Text(
                     "โปรไฟล์",
@@ -73,83 +112,105 @@ class _EditProfileState extends State<EditProfile> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    height: 490,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade400,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          child: CircleAvatar(
-                            radius: 80,
-                            backgroundImage: AssetImage(img),
-                          ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        height: 580,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              child: CircleAvatar(
+                                radius: 80,
+                                backgroundImage: AssetImage(img),
+                              ),
+                            ),
+                            Form(
+                                child: Column(
+                              children: [
+                                Text(
+                                  'ชื่อ',
+                                  style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                          fontSize: 26,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 40),
+                                  child: TextFormField(
+                                    decoration: inputstyle,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  'โทรศัพท์',
+                                  style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                          fontSize: 26,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 40),
+                                  child: TextFormField(
+                                    decoration: inputstyle,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  'อีเมล',
+                                  style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                          fontSize: 26,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 40),
+                                  child: TextFormField(
+                                    decoration: inputstyle,
+                                  ),
+                                ),
+                              ],
+                            )),
+                            SizedBox(height: 22),
+                            Container(
+                              width: 100,
+                              height: 45,
+                              decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 12, 72, 141),
+                                  borderRadius: BorderRadius.circular(14)),
+                              child: Center(
+                                  child: Text(
+                                "บันทึก",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              )),
+                            )
+                          ],
                         ),
-                        Text(
-                          "ชื่อ",
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                                  fontSize: 26,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                        Text(
-                          widget.user_id.toString(),
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                            fontSize: 26,
-                            color: Colors.black,
-                          )),
-                        ),
-                        Text(
-                          "เบอร์โทร",
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                                  fontSize: 26,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                        Text(
-                          "xxxxxxxxxxxxxxxxx",
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                            fontSize: 26,
-                            color: Colors.black,
-                          )),
-                        ),
-                        Text(
-                          "อีเมล",
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                                  fontSize: 26,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                        Text(
-                          "xxxxxxxx@gmail.com",
-                          style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                            fontSize: 26,
-                            color: Colors.black,
-                          )),
-                        ),
-                        SizedBox(height: 22),
-                        Container(
-                          width: 100,
-                          height: 45,
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 12, 72, 141),
-                              borderRadius: BorderRadius.circular(14)),
-                          child: Center(
-                              child: Text(
-                            "บันทึก",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          )),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                   SizedBox(

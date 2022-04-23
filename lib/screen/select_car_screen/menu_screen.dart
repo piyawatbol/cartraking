@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, prefer_void_to_null
 // ignore_for_file: prefer_const_literals_to_create_immutables
+import 'package:cartrackingapp/screen/map_screen/customer_map.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'driver_screen.dart';
+import 'select_car.dart';
 
 class MenuScreen extends StatefulWidget {
   MenuScreen({Key? key}) : super(key: key);
@@ -53,7 +54,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (BuildContext context) {
-                    return DriverScreen();
+                    return SelectCar();
                   }));
                 },
                 child: Container(
@@ -87,7 +88,12 @@ class _MenuScreenState extends State<MenuScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return CustomerMap();
+                    }));
+                  },
                   child: Container(
                     width: double.infinity,
                     height: 35,

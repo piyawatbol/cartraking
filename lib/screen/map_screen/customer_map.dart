@@ -1,6 +1,5 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, unused_element, avoid_print, unnecessary_new, unused_local_variable, non_constant_identifier_names, prefer_final_fields, must_be_immutable, unnecessary_brace_in_string_interps
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, unused_element, avoid_print, unnecessary_new, unused_local_variable, non_constant_identifier_names, prefer_final_fields
 import 'dart:async';
-import 'dart:convert';
 import 'package:cartrackingapp/screen/profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,24 +8,20 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../ipconnect.dart';
 
-class DriverMap extends StatefulWidget {
-  String? car_id;
-  String? user_id;
-  DriverMap({Key? key, required this.car_id, required this.user_id})
-      : super(key: key);
+class CustomerMap extends StatefulWidget {
+  CustomerMap({Key? key}) : super(key: key);
 
   @override
-  State<DriverMap> createState() => _DriverMapState();
+  State<CustomerMap> createState() => _CustomerMapState();
 }
 
-class _DriverMapState extends State<DriverMap> {
+class _CustomerMapState extends State<CustomerMap> {
   GoogleMapController? mapController;
-  Position? driverLocation;
-
+  Position? userLocation;
   String? user_id;
+  //Set<Marker> _makers = {};
+  late BitmapDescriptor mapMaker;
 
-  Set<Marker> _makers = {};
-  // late BitmapDescriptor mapMaker;
   // void setCustomeMarker() async {
   //   mapMaker = await BitmapDescriptor.fromAssetImage(
   //       ImageConfiguration(), 'assets/images/peofile.jpg');
@@ -34,26 +29,15 @@ class _DriverMapState extends State<DriverMap> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    setState(() {
-      _makers.add(
-        Marker(
-            markerId: MarkerId('id-1'),
-            // icon: mapMaker,
-            position: LatLng(13.7820, 100.6354),
-            infoWindow: InfoWindow(title: 'hello', snippet: 'hello2')),
-      );
-    });
-  }
-
-  Future select_car_driver() async {
-    var url = Uri.parse(
-        'http://${ipconnect}/cartraking/get_car/select_car_driver.php');
-    var response = await http.post(url, body: {
-      "car_id": widget.car_id.toString(),
-      "user_id": widget.user_id.toString(),
-    });
-    var data = json.decode(response.body);
-    print(data.toString());
+    // setState(() {
+    //   _makers.add(
+    //     Marker(
+    //         markerId: MarkerId('id-1'),
+    //         // icon: mapMaker,
+    //         position: LatLng(13.7820, 100.6354),
+    //         infoWindow: InfoWindow(title: 'hello', snippet: 'hello2')),
+    //   );
+    // });
   }
 
   Future get_user_id() async {
@@ -61,20 +45,20 @@ class _DriverMapState extends State<DriverMap> {
     setState(() {
       user_id = preferences.getString('user_id');
     });
-    // print(user_id);
+    print(user_id);
   }
 
   Future<Position?> _getLocation() async {
-    driverLocation = await Geolocator.getCurrentPosition(
+    userLocation = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
-    return driverLocation;
+    return userLocation;
   }
 
   getDataRealTime() async {
-    Timer.periodic(new Duration(seconds: 5), (timer) async {
+    Timer.periodic(new Duration(seconds: 15), (timer) async {
       _getLocation();
-      // print("latitude ${driverLocation!.latitude}");
-      // print("longtitude ${driverLocation!.longitude}");
+      print("latitude ${userLocation!.latitude}");
+      print("longtitude ${userLocation!.longitude}");
       insert_location();
       // timer.cancel(); //ถ้าต้องการให้หยุดทำงาน
     });
@@ -85,30 +69,15 @@ class _DriverMapState extends State<DriverMap> {
         'http://$ipconnect/cartraking/insert_location/insert_location.php');
     var response = await http.post(url, body: {
       "user_id": user_id.toString(),
-      "car_id": widget.car_id.toString(),
-      "lati": driverLocation!.latitude.toString(),
-      "longti": driverLocation!.longitude.toString(),
+      "lati": userLocation!.latitude.toString(),
+      "longti": userLocation!.longitude.toString(),
     });
-  }
-
-  List dataList = [];
-  Future get_data_user() async {
-    final response = await http.get(Uri.parse(
-        "http://$ipconnect/cartraking/login/get_data_user.php?user_id=$user_id"));
-    var data = json.decode(response.body);
-
-    setState(() {
-      dataList = data;
-    });
-    //print(data);
   }
 
   @override
   void initState() {
-    select_car_driver();
     get_user_id();
     getDataRealTime();
-
     //setCustomeMarker();
     super.initState();
   }
@@ -120,12 +89,12 @@ class _DriverMapState extends State<DriverMap> {
         future: _getLocation(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            // print(driverLocation!.latitude);
-            //  print(driverLocation!.longitude);
+            print(userLocation!.latitude);
+            print(userLocation!.longitude);
             return Stack(
               children: [
                 GoogleMap(
-                    markers: _makers,
+                    //  markers: _makers,
                     zoomControlsEnabled: false,
                     mapType: MapType.normal,
                     myLocationButtonEnabled: false,
@@ -133,8 +102,8 @@ class _DriverMapState extends State<DriverMap> {
                     myLocationEnabled: true,
                     initialCameraPosition: CameraPosition(
                         zoom: 19,
-                        target: LatLng(driverLocation!.latitude,
-                            driverLocation!.longitude))),
+                        target: LatLng(
+                            userLocation!.latitude, userLocation!.longitude))),
                 Positioned(
                   left: 20,
                   top: 75,
@@ -167,7 +136,7 @@ class _DriverMapState extends State<DriverMap> {
                           width: 25,
                         ),
                         Text(
-                          "รถคันที่ ${widget.car_id} ",
+                          "รถคันที่ 1 ",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -233,7 +202,7 @@ class _DriverMapState extends State<DriverMap> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           mapController?.animateCamera(CameraUpdate.newLatLngZoom(
-              LatLng(driverLocation!.latitude, driverLocation!.longitude), 20));
+              LatLng(userLocation!.latitude, userLocation!.longitude), 20));
           // showDialog(
           //     context: context,
           //     builder: (context) {

@@ -5,8 +5,9 @@ import 'dart:convert';
 import 'package:cartrackingapp/screen/forget_screen/forget_pass_screen.dart';
 import 'package:cartrackingapp/screen/login_screen/register_screen.dart';
 import 'package:cartrackingapp/screen/login_screen/start_screen.dart';
-import 'package:cartrackingapp/screen/menu_screen/menu_screnn.dart';
+import 'package:cartrackingapp/screen/map_screen/customer_map.dart';
 import 'package:cartrackingapp/screen/profile_screen/profile_screen.dart';
+import 'package:cartrackingapp/screen/select_car_screen/select_car.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -73,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
       "pass_word": pass_word.text,
     });
     var data = json.decode(response.body);
+
     if (data == "miss") {
       Fluttertoast.showToast(
           msg: "ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง",
@@ -87,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
       preferences.setString('user_id', data[0]['user_id']);
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) {
-        return MenuScreen();
+        return SelectCar();
       }));
     }
   }
