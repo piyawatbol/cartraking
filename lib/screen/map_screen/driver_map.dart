@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, unused_element, avoid_print, unnecessary_new, unused_local_variable, non_constant_identifier_names, prefer_final_fields, must_be_immutable, unnecessary_brace_in_string_interps
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, unused_element, avoid_print, unnecessary_new, unused_local_variable, non_constant_identifier_names, prefer_final_fields, must_be_immutable, unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 import 'dart:async';
 import 'dart:convert';
 import 'package:cartrackingapp/screen/profile_screen/profile_screen.dart';
@@ -22,11 +22,15 @@ class DriverMap extends StatefulWidget {
 class _DriverMapState extends State<DriverMap> {
   GoogleMapController? mapController;
   Position? driverLocation;
-
   String? user_id;
-
+  List location_car = [];
+  String? lati_user;
+  String? longti_user;
   Set<Marker> _makers = {};
-  // late BitmapDescriptor mapMaker;
+  String? car_id;
+
+  late BitmapDescriptor mapMaker;
+
   // void setCustomeMarker() async {
   //   mapMaker = await BitmapDescriptor.fromAssetImage(
   //       ImageConfiguration(), 'assets/images/peofile.jpg');
@@ -38,9 +42,12 @@ class _DriverMapState extends State<DriverMap> {
       _makers.add(
         Marker(
             markerId: MarkerId('id-1'),
-            // icon: mapMaker,
-            position: LatLng(13.7820, 100.6354),
-            infoWindow: InfoWindow(title: 'hello', snippet: 'hello2')),
+            //  icon: mapMaker,
+            position: LatLng(double.parse(lati_user.toString()),
+                double.parse(longti_user.toString())),
+            infoWindow: InfoWindow(
+                title: 'ลูกค้า',
+                snippet: '${lati_user.toString()} ${longti_user.toString()}')),
       );
     });
   }
@@ -53,7 +60,7 @@ class _DriverMapState extends State<DriverMap> {
       "user_id": widget.user_id.toString(),
     });
     var data = json.decode(response.body);
-    print(data.toString());
+    // print(data.toString());
   }
 
   Future get_user_id() async {
@@ -61,7 +68,33 @@ class _DriverMapState extends State<DriverMap> {
     setState(() {
       user_id = preferences.getString('user_id');
     });
-    // print(user_id);
+    get_data_user();
+  }
+
+  Future get_data_user() async {
+    final response = await http.get(Uri.parse(
+        "http://$ipconnect/cartraking/login/get_data_user.php?user_id=$user_id"));
+    var data = json.decode(response.body);
+
+    setState(() {
+      dataList = data;
+      car_id = dataList[0]['car_id'];
+    });
+    //  print("car_id : ${car_id}");
+    get_location_car();
+  }
+
+  Future get_location_car() async {
+    final response = await http.get(Uri.parse(
+        "http://$ipconnect/cartraking/get_car/get_location_car.php?car_id=${car_id}"));
+    var data = json.decode(response.body);
+    setState(() {
+      location_car = data;
+      lati_user = location_car[0]['lo_customer_lati'];
+      longti_user = location_car[0]['lo_customer_longti'];
+    });
+    print("location lati car : ${lati_user}");
+    print("location longti car : ${longti_user}");
   }
 
   Future<Position?> _getLocation() async {
@@ -92,23 +125,12 @@ class _DriverMapState extends State<DriverMap> {
   }
 
   List dataList = [];
-  Future get_data_user() async {
-    final response = await http.get(Uri.parse(
-        "http://$ipconnect/cartraking/login/get_data_user.php?user_id=$user_id"));
-    var data = json.decode(response.body);
-
-    setState(() {
-      dataList = data;
-    });
-    //print(data);
-  }
 
   @override
   void initState() {
     select_car_driver();
     get_user_id();
     getDataRealTime();
-
     //setCustomeMarker();
     super.initState();
   }

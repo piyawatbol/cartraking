@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, non_constant_identifier_names, avoid_print, avoid_unnecessary_containers, sized_box_for_whitespace, unnecessary_brace_in_string_interps, unused_element
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'dart:convert';
+import 'package:cartrackingapp/screen/map_screen/customer_map.dart';
 import 'package:cartrackingapp/screen/map_screen/driver_map.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +18,7 @@ class SelectCar extends StatefulWidget {
 
 class _SelectCarState extends State<SelectCar> {
   List dataList = [];
+  List dataListuser = [];
   String? car_id;
   String? user_id;
 
@@ -25,7 +27,18 @@ class _SelectCarState extends State<SelectCar> {
     setState(() {
       user_id = preferences.getString('user_id');
     });
-    // print('user_id : ${user_id}');
+    get_data_user();
+  }
+
+  Future get_data_user() async {
+    final response = await http.get(Uri.parse(
+        "http://$ipconnect/cartraking/login/get_data_user.php?user_id=$user_id"));
+    var data = json.decode(response.body);
+
+    setState(() {
+      dataListuser = data;
+    });
+    // print(dataList);
   }
 
   Future select_car_driver(car_id) async {
@@ -54,6 +67,7 @@ class _SelectCarState extends State<SelectCar> {
   @override
   void initState() {
     get_car();
+    select_car_driver(car_id);
     super.initState();
   }
 
@@ -97,10 +111,15 @@ class _SelectCarState extends State<SelectCar> {
                         select_car_driver(car_id = dataList[index]['car_id']);
                         Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                          return DriverMap(
-                            car_id: car_id,  
-                            user_id: user_id,                   
-                          );
+                          return dataListuser[0]['status'] == 'driver'
+                              ? DriverMap(
+                                  car_id: car_id,
+                                  user_id: user_id,
+                                )
+                              : CustomerMap(
+                                  car_id: car_id,
+                                  user_id: user_id,
+                                );
                         }));
                       },
                       child: Padding(

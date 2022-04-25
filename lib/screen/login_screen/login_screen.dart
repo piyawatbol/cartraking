@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:cartrackingapp/screen/forget_screen/forget_pass_screen.dart';
 import 'package:cartrackingapp/screen/login_screen/register_screen.dart';
 import 'package:cartrackingapp/screen/login_screen/start_screen.dart';
-import 'package:cartrackingapp/screen/map_screen/customer_map.dart';
+
 import 'package:cartrackingapp/screen/profile_screen/profile_screen.dart';
 import 'package:cartrackingapp/screen/select_car_screen/select_car.dart';
 import 'package:flutter/material.dart';
