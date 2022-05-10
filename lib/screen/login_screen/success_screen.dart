@@ -12,7 +12,7 @@ class SuccessScreen extends StatefulWidget {
 }
 
 class _SuccessScreenState extends State<SuccessScreen> {
-  final urlImg = 'assets/images/correct.jpg';
+  final urlImg = 'assets/images/correct.png';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

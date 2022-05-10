@@ -13,7 +13,8 @@ class SuccessReset extends StatefulWidget {
 }
 
 class _SuccessResetState extends State<SuccessReset> {
-  final urlImg = 'assets/images/correct.jpg';
+  final urlImg = 'assets/images/correct.png';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +36,7 @@ class _SuccessResetState extends State<SuccessReset> {
                 child: Column(
               children: [
                 SizedBox(
-                  height: 170,
+                  height: 150,
                 ),
                 CircleAvatar(
                   radius: 120,

@@ -35,12 +35,10 @@ class _StartScreenState extends State<StartScreen> {
               ])),
         ),
         Positioned(
-            left: 190,
-            top: 120,
-            child: Icon(
-              Icons.location_pin,
-              size: 160,
-              color: Colors.white60,
+            left: 230,
+            top: 140,
+            child: Image.asset(
+              'assets/images/location.png',
             )),
         Positioned(
           top: 120,

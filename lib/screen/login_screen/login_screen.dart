@@ -1,11 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, sized_box_for_whitespace, unused_import, non_constant_identifier_names, avoid_print, unnecessary_brace_in_string_interps
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'dart:convert';
-
-import 'package:cartrackingapp/screen/forget_screen/forget_pass_screen.dart';
+import 'package:cartrackingapp/screen/forget_screen/forget_email.dart';
 import 'package:cartrackingapp/screen/login_screen/register_screen.dart';
 import 'package:cartrackingapp/screen/login_screen/start_screen.dart';
-
 import 'package:cartrackingapp/screen/profile_screen/profile_screen.dart';
 import 'package:cartrackingapp/screen/select_car_screen/select_car.dart';
 import 'package:flutter/material.dart';
@@ -66,15 +64,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController user_name = TextEditingController();
   TextEditingController pass_word = TextEditingController();
-
   Future login() async {
-    var url = Uri.parse('http://${ipconnect}/cartraking/login/login.php');
+    var url = Uri.parse('${ipconnect}/login/login.php');
     var response = await http.post(url, body: {
       "user_name": user_name.text,
       "pass_word": pass_word.text,
     });
     var data = json.decode(response.body);
-
     if (data == "miss") {
       Fluttertoast.showToast(
           msg: "ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง",
@@ -96,33 +92,34 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(children: [
-        Container(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        body: Container(
+          height: double.infinity,
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
                 Colors.purple.shade700,
                 Colors.pink.shade200,
                 Colors.yellow.shade200
-              ])),
-        ),
-        SingleChildScrollView(
+              ],
+            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 30,
             ),
-            child: Container(
-              width: double.infinity,
-              height: 700,
+            child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 100,
+                    height: 130,
                   ),
                   Text(
                     "เข้าสู่ระบบ",
@@ -132,9 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 30,
                             fontWeight: FontWeight.bold)),
                   ),
-                  SizedBox(
-                    height: 50,
-                  ),
+                  SizedBox(height: 50),
                   Form(
                       key: formKey,
                       child: Column(
@@ -184,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                return ForgetPassScreen();
+                                return ForgetEmail();
                               }));
                             },
                             child: Padding(
@@ -308,8 +303,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-        )
-      ]),
+        ),
+      ),
     );
   }
 }
