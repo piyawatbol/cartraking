@@ -96,34 +96,6 @@ class _CustomerMapState extends State<CustomerMap> {
   //     "title": "แหล่งเรียนรู้กรุงธนบุรีศึกษา"
   //   },
   // ];
-  Future get_map() async {
-    final response =
-        await http.get(Uri.parse("$ipconnect/get_map/get_map.php"));
-    var data = json.decode(response.body);
-    print(data);
-    setState(() {
-      MapData = data;
-    });
-     addmap() {
-    for (var i = 0; i < MapData.length; i++) {
-      var lat = double.parse("${MapData[i]['lat']}");
-      var long = double.parse("${MapData[i]['long']}");
-      var title = MapData[i]['title'].toString();
-      listMap.add(Marker(
-        onTap: () {
-          setState(() async {
-            await calculateDistance(lat, long);
-            titleStr = title;
-            visibleTabBottom = true;
-          });
-        },
-        markerId: MarkerId(i.toString()),
-        position: LatLng(lat, long),
-        infoWindow: InfoWindow(title: title),
-      ));
-    }
-  }
-  }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -141,6 +113,34 @@ class _CustomerMapState extends State<CustomerMap> {
             )),
       );
     });
+  }
+
+  addmap() async {
+    final response =
+        await http.get(Uri.parse("$ipconnect/get_map/get_map.php"));
+    var data = json.decode(response.body);
+    print(data);
+    setState(() {
+      MapData = data;
+    });
+
+    for (var i = 0; i < MapData.length; i++) {
+      var lat = double.parse("${MapData[i]['lat']}");
+      var long = double.parse("${MapData[i]['lng']}");
+      var title = MapData[i]['title'].toString();
+      listMap.add(Marker(
+        onTap: () {
+          setState(() async {
+            await calculateDistance(lat, long);
+            titleStr = title;
+            visibleTabBottom = true;
+          });
+        },
+        markerId: MarkerId(i.toString()),
+        position: LatLng(lat, long),
+        infoWindow: InfoWindow(title: title),
+      ));
+    }
   }
 
   Future get_location_car() async {
@@ -189,8 +189,9 @@ class _CustomerMapState extends State<CustomerMap> {
 
   @override
   void initState() {
+    addmap();
     get_location_car();
-    get_map();
+
     setCustomMaker();
     getDataRealTime();
     super.initState();
@@ -218,7 +219,7 @@ class _CustomerMapState extends State<CustomerMap> {
                     onMapCreated: _onMapCreated,
                     myLocationEnabled: true,
                     initialCameraPosition: CameraPosition(
-                        zoom: 17,
+                        zoom: 16,
                         target: LatLng(driverLocation!.latitude,
                             driverLocation!.longitude))),
                 Positioned(
