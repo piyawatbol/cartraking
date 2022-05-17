@@ -38,7 +38,7 @@ class _SelectCarState extends State<SelectCar> {
     setState(() {
       userList = data;
     });
-    print('user ${userList}');
+   // print('user ${userList}');
   }
 
   Future get_car() async {
@@ -49,7 +49,7 @@ class _SelectCarState extends State<SelectCar> {
     setState(() {
       carList = data;
     });
-    print("car : ${carList}");
+  //  print("car : ${carList}");
   }
 
   Future<Null> logout() async {

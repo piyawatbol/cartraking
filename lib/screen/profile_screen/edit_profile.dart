@@ -52,7 +52,6 @@ class _EditProfileState extends State<EditProfile> {
     name_user = dataList[0]['user_name'];
     phone_user = dataList[0]['phone'];
     email_user = dataList[0]['email'];
-
     print(dataList);
   }
 
@@ -100,6 +99,7 @@ class _EditProfileState extends State<EditProfile> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+      Navigator.pop(context);
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) {
         return ProFileScreen();
@@ -127,33 +127,31 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return dataList.isEmpty
-        ? Scaffold(
-            body: Container(
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          )
-        : Stack(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Scaffold(
-                  body: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                              Colors.purple.shade700,
-                              Colors.pink.shade200,
-                              Colors.yellow.shade200
-                            ])),
-                      ),
-                      SafeArea(
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Scaffold(
+            body: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                        Colors.purple.shade700,
+                        Colors.pink.shade200,
+                        Colors.yellow.shade200
+                      ])),
+                ),
+                dataList.isEmpty
+                    ? Container(
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    : SafeArea(
                         child: SingleChildScrollView(
                           child: Container(
                             width: double.infinity,
@@ -219,18 +217,24 @@ class _EditProfileState extends State<EditProfile> {
                                               child: _image == null
                                                   ? img == '' || img == null
                                                       ? CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.grey,
                                                           radius: 80,
                                                           backgroundImage:
                                                               AssetImage(
                                                                   'assets/images/profile.jpg'),
                                                         )
                                                       : CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.grey,
                                                           radius: 80,
                                                           backgroundImage:
                                                               NetworkImage(
                                                                   '${ipconnect}/images_user/${img}'),
                                                         )
                                                   : CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.grey,
                                                       radius: 80,
                                                       backgroundImage:
                                                           FileImage(_image!),
@@ -338,30 +342,30 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
+              ],
+            ),
+          ),
+        ),
+        Visibility(
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
+          visible: statusLoading == true ? true : false,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+                border: Border.all(width: 2, color: Colors.deepPurple),
+                color: Colors.grey.withOpacity(0.5)),
+            child: Center(
+              child: CircularProgressIndicator(
+                color: Colors.deepPurple,
               ),
-              Visibility(
-                maintainSize: true,
-                maintainAnimation: true,
-                maintainState: true,
-                visible: statusLoading == true ? true : false,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: Colors.deepPurple),
-                      color: Colors.grey.withOpacity(0.5)),
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.deepPurple,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Padding BuildTxt(TextEditingController? controllerEdit) {
