@@ -2,10 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- เพิ่มตำแหน่ง -->
     <key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs your location to test the location feature of the Google Maps plugin.</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+    <!-- เพิ่มตำแหน่ง -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -49,12 +51,13 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<!-- เพิ่มรูป -->
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>Need to upload image</string>
     <key>NSCameraUsageDescription</key>
     <string>Need to upload image</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Need to upload image</string>
-
+	<!-- เพิ่มรูป -->
 </dict>
 </plist>
