@@ -38,18 +38,18 @@ class _SelectCarState extends State<SelectCar> {
     setState(() {
       userList = data;
     });
-   // print('user ${userList}');
+    // print('user ${userList}');
   }
 
   Future get_car() async {
     final response =
-        await http.get(Uri.parse("$ipconnect/get_car/get_car.php"));
+        await http.get(Uri.parse("$ipconnect/get_car/select_car.php"));
     var data = json.decode(response.body);
 
     setState(() {
       carList = data;
     });
-  //  print("car : ${carList}");
+    //  print("car : ${carList}");
   }
 
   Future<Null> logout() async {
@@ -134,16 +134,16 @@ class _SelectCarState extends State<SelectCar> {
                                   Colors.pink.shade400
                                 ])),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              width: 120,
+                            Center(
+                              child: Text("คันที่ ${carList[index]['car_id']} ",
+                                  style: GoogleFonts.poppins(
+                                      textStyle: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ))),
                             ),
-                            Text("คันที่ ${carList[index]['car_id']} ",
-                                style: GoogleFonts.poppins(
-                                    textStyle: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                ))),
                           ],
                         ),
                       ),

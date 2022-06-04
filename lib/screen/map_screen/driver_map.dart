@@ -56,7 +56,7 @@ class _DriverMapState extends State<DriverMap> {
   }
 
   getDataRealTime() async {
-    Timer.periodic(new Duration(seconds: 10), (timer) async {
+    Timer.periodic(new Duration(seconds: 1), (timer) async {
       _getLocation();
       insert_location();
       // timer.cancel(); //ถ้าต้องการให้หยุดทำงาน
@@ -119,7 +119,7 @@ class _DriverMapState extends State<DriverMap> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                                Timer.periodic(Duration(seconds: 1), (timer) async {
+                            Timer.periodic(Duration(seconds: 1), (timer) async {
                               timer.cancel(); //ถ้าต้องการให้หยุดทำงาน
                             });
                             Navigator.pop(context);
@@ -170,9 +170,9 @@ class _DriverMapState extends State<DriverMap> {
                   top: 80,
                   child: GestureDetector(
                     onTap: () {
-                          Timer.periodic(Duration(seconds: 1), (timer) async {
-                              timer.cancel(); //ถ้าต้องการให้หยุดทำงาน
-                            });
+                      Timer.periodic(Duration(seconds: 1), (timer) async {
+                        timer.cancel(); //ถ้าต้องการให้หยุดทำงาน
+                      });
                       Navigator.pop(context);
                     },
                     child: Container(

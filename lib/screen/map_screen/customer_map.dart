@@ -69,7 +69,7 @@ class _CustomerMapState extends State<CustomerMap> {
 
   void setCustomMaker() async {
     mapMaker = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), "assets/images/bus.png");
+        ImageConfiguration(size: Size(10, 10)), "assets/images/bus.png");
   }
 
   List<Marker> listMap = [];
@@ -104,33 +104,6 @@ class _CustomerMapState extends State<CustomerMap> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    setState(() {
-      listMap.add(
-        Marker(
-            onTap: () {
-              showModalBottomSheet(
-                  barrierColor: Colors.transparent,
-                  context: this.context,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(30),
-                    ),
-                  ),
-                  builder: (context) {
-                    return showmodal_bus();
-                  });
-            },
-            markerId: MarkerId('id-1'),
-            icon: mapMaker,
-            position: lati_driver == ''
-                ? LatLng(0, 0)
-                : LatLng(double.parse(lati_driver.toString()),
-                    double.parse(longti_driver.toString())),
-            infoWindow: InfoWindow(
-              title: 'คนขับ',
-            )),
-      );
-    });
   }
 
   addmap() async {
@@ -168,6 +141,33 @@ class _CustomerMapState extends State<CustomerMap> {
         infoWindow: InfoWindow(title: title),
       ));
     }
+    setState(() {
+      listMap.add(
+        Marker(
+            onTap: () {
+              showModalBottomSheet(
+                  barrierColor: Colors.transparent,
+                  context: this.context,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(30),
+                    ),
+                  ),
+                  builder: (context) {
+                    return showmodal_bus();
+                  });
+            },
+            markerId: MarkerId('id-1'),
+            icon: mapMaker,
+            position: lati_driver == ''
+                ? LatLng(0, 0)
+                : LatLng(double.parse(lati_driver.toString()),
+                    double.parse(longti_driver.toString())),
+            infoWindow: InfoWindow(
+              title: 'คนขับ',
+            )),
+      );
+    });
   }
 
   get_location_car() async {
@@ -207,9 +207,10 @@ class _CustomerMapState extends State<CustomerMap> {
   }
 
   getDataRealTime() async {
-    Timer.periodic(Duration(seconds: 10), (timer) async {
+    Timer.periodic(Duration(seconds: 1), (timer) async {
       get_location_car();
-      _getLocation();
+      addmap();
+      setCustomMaker();
       // timer.cancel();
     });
   }
@@ -266,9 +267,6 @@ class _CustomerMapState extends State<CustomerMap> {
 
   @override
   void initState() {
-    addmap();
-    get_location_car();
-    setCustomMaker();
     getDataRealTime();
     super.initState();
   }

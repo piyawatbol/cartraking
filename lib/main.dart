@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
     } else {
       setState(() {
         user_id = preferences.getString('user_id')!;
-      });
+      }); 
     }
   }
 
