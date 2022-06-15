@@ -69,7 +69,7 @@ class _CustomerMapState extends State<CustomerMap> {
 
   void setCustomMaker() async {
     mapMaker = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(size: Size(10, 10)), "assets/images/bus.png");
+        ImageConfiguration(), "assets/images/bus1.png");
   }
 
   List<Marker> listMap = [];
@@ -111,9 +111,12 @@ class _CustomerMapState extends State<CustomerMap> {
         await http.get(Uri.parse("$ipconnect/get_map/get_map.php"));
     var data = json.decode(response.body);
     // print(data);
-    setState(() {
-      MapData = data;
-    });
+    if (this.mounted) {
+      setState(() {
+        MapData = data;
+      });
+    }
+
     for (var i = 0; i < MapData.length; i++) {
       var lat = double.parse("${MapData[i]['lat']}");
       var long = double.parse("${MapData[i]['lng']}");
@@ -141,33 +144,35 @@ class _CustomerMapState extends State<CustomerMap> {
         infoWindow: InfoWindow(title: title),
       ));
     }
-    setState(() {
-      listMap.add(
-        Marker(
-            onTap: () {
-              showModalBottomSheet(
-                  barrierColor: Colors.transparent,
-                  context: this.context,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(30),
+    if (this.mounted) {
+      setState(() {
+        listMap.add(
+          Marker(
+              onTap: () {
+                showModalBottomSheet(
+                    barrierColor: Colors.transparent,
+                    context: this.context,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(30),
+                      ),
                     ),
-                  ),
-                  builder: (context) {
-                    return showmodal_bus();
-                  });
-            },
-            markerId: MarkerId('id-1'),
-            icon: mapMaker,
-            position: lati_driver == ''
-                ? LatLng(0, 0)
-                : LatLng(double.parse(lati_driver.toString()),
-                    double.parse(longti_driver.toString())),
-            infoWindow: InfoWindow(
-              title: 'คนขับ',
-            )),
-      );
-    });
+                    builder: (context) {
+                      return showmodal_bus();
+                    });
+              },
+              markerId: MarkerId('id-1'),
+              icon: mapMaker,
+              position: lati_driver == ''
+                  ? LatLng(0, 0)
+                  : LatLng(double.parse(lati_driver.toString()),
+                      double.parse(longti_driver.toString())),
+              infoWindow: InfoWindow(
+                title: 'คนขับ',
+              )),
+        );
+      });
+    }
   }
 
   get_location_car() async {

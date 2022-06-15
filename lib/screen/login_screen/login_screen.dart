@@ -137,13 +137,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                              vertical: 10,
+                              vertical: 5,
                             ),
-                            child: Text(
-                              "ชื่อผู้ใช้",
-                              style: GoogleFonts.poppins(
-                                  textStyle: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
+                            child: SizedBox(
+                              width: 100,
+                              child: Text(
+                                "ชื่อผู้ใช้",
+                                style: GoogleFonts.poppins(
+                                    textStyle: TextStyle(
+                                        color: Colors.white, fontSize: 18)),
+                              ),
                             ),
                           ),
                           TextFormField(

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, sized_box_for_whitespace, non_constant_identifier_names, must_be_immutable, unnecessary_brace_in_string_interps, avoid_print, unused_local_variable, unused_field, unrelated_type_equality_checks, avoid_unnecessary_containers, unnecessary_null_comparison, prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_const_constructors_in_immutables, sized_box_for_whitespace, non_constant_identifier_names, must_be_immutable, unnecessary_brace_in_string_interps, avoid_print, unused_local_variable, unused_field, unrelated_type_equality_checks, avoid_unnecessary_containers, unnecessary_null_comparison, prefer_typing_uninitialized_variables, unnecessary_this
 //  prefer_const_constructors, sized_box_for_whitespace
 // ignore_for_file: prefer_const_literals_to_create_immutables
 // ignore_for_file: prefer_const_constructors
@@ -6,10 +6,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cartrackingapp/screen/profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../ipconnect.dart';
 
@@ -31,7 +33,7 @@ class _EditProfileState extends State<EditProfile> {
   String? phone_user;
   String? email_user;
   bool statusLoading = false;
-  File? _image;
+  File? image;
   String? img;
   Future get_user_id() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -55,29 +57,43 @@ class _EditProfileState extends State<EditProfile> {
     print(dataList);
   }
 
-  get_image(ImgSource source) async {
-    var image = await ImagePickerGC.pickImage(
-      context: context,
-      source: source,
-      cameraIcon: Icon(
-        Icons.add,
-        color: Colors.red,
-      ),
-    );
-    if (image != null) {
-      setState(() {
-        _image = File(image!.path);
-      });
-    } else {
-      _image = File('');
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (image == null) return;
+
+      final imageTemp = File(image.path);
+
+      setState(() => this.image = imageTemp);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
     }
   }
+
+  // get_image(ImgSource source) async {
+  //   var image = await ImagePicker().pickImage(
+  //     context: context,
+  //     source: source,
+  //     cameraIcon: Icon(
+  //       Icons.add,
+  //       color: Colors.red,
+  //     ),
+  //   );
+  //   if (image != null) {
+  //     setState(() {
+  //       _image = File(image!.path);
+  //     });
+  //   } else {
+  //     _image = File('');
+  //   }
+  // }
 
   Future edit_user() async {
     final uri = Uri.parse("${ipconnect}/login/edit_user.php");
     var request = http.MultipartRequest('POST', uri);
-    if (_image != null) {
-      var img = await http.MultipartFile.fromPath("img", _image!.path);
+    if (image != null) {
+      var img = await http.MultipartFile.fromPath("img", image!.path);
       request.files.add(img);
     }
 
@@ -188,149 +204,144 @@ class _EditProfileState extends State<EditProfile> {
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    "โปรไฟล์",
-                                    style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                            fontSize: 35,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold)),
+                                  SizedBox(
+                                    width: 130,
+                                    child: Text(
+                                      "โปรไฟล์",
+                                      style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                              fontSize: 35,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 20,
                                   ),
                                   Container(
-                                    height: 580,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.7,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                         color: Colors.grey.shade400,
                                         borderRadius:
                                             BorderRadius.circular(20)),
-                                    child: Column(
-                                      children: [
-                                        Stack(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 20),
-                                              child: _image == null
-                                                  ? img == '' || img == null
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          Stack(
+                                            children: [
+                                              Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 20),
+                                                  child: image != null
                                                       ? CircleAvatar(
-                                                          backgroundColor:
-                                                              Colors.grey,
                                                           radius: 80,
                                                           backgroundImage:
-                                                              AssetImage(
-                                                                  'assets/images/profile.jpg'),
+                                                              FileImage(image!),
                                                         )
                                                       : CircleAvatar(
-                                                          backgroundColor:
-                                                              Colors.grey,
                                                           radius: 80,
                                                           backgroundImage:
                                                               NetworkImage(
-                                                                  '${ipconnect}/images_user/${img}'),
-                                                        )
-                                                  : CircleAvatar(
+                                                                  "$ipconnect/images_user/$img"),
+                                                        )),
+                                              Positioned(
+                                                right: 5,
+                                                bottom: 20,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    pickImage();
+                                                  },
+                                                  child: CircleAvatar(
                                                       backgroundColor:
-                                                          Colors.grey,
-                                                      radius: 80,
-                                                      backgroundImage:
-                                                          FileImage(_image!),
-                                                    ),
-                                            ),
-                                            Positioned(
-                                              right: 5,
-                                              bottom: 20,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  get_image(ImgSource.Gallery);
-                                                },
-                                                child: CircleAvatar(
-                                                    backgroundColor:
-                                                        Colors.black,
-                                                    child: Icon(
-                                                        Icons.add_a_photo)),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Form(
-                                            child: Column(
-                                          children: [
-                                            Text(
-                                              'ชื่อ',
-                                              style: GoogleFonts.montserrat(
-                                                  textStyle: TextStyle(
-                                                      fontSize: 26,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            BuildTxt(name),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Text(
-                                              'โทรศัพท์',
-                                              style: GoogleFonts.montserrat(
-                                                  textStyle: TextStyle(
-                                                      fontSize: 26,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            BuildTxt(phone),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Text(
-                                              'อีเมล',
-                                              style: GoogleFonts.montserrat(
-                                                  textStyle: TextStyle(
-                                                      fontSize: 26,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            BuildTxt(email),
-                                          ],
-                                        )),
-                                        SizedBox(height: 22),
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              statusLoading = true;
-                                            });
-                                            edit_user();
-                                          },
-                                          child: Container(
-                                            width: 100,
-                                            height: 45,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xff0c488d),
-                                                borderRadius:
-                                                    BorderRadius.circular(14)),
-                                            child: Center(
-                                                child: Text(
-                                              "บันทึก",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20),
-                                            )),
+                                                          Colors.black,
+                                                      child: Icon(
+                                                          Icons.add_a_photo)),
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        )
-                                      ],
+                                          Form(
+                                              child: Column(
+                                            children: [
+                                              Text(
+                                                'ชื่อ',
+                                                style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 26,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              BuildTxt(name),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              SizedBox(
+                                                width: 110,
+                                                child: Text(
+                                                  'โทรศัพท์',
+                                                  style: GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                          fontSize: 26,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              BuildTxt(phone),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              Text(
+                                                'อีเมล',
+                                                style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 26,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              BuildTxt(email),
+                                            ],
+                                          )),
+                                          SizedBox(height: 22),
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                statusLoading = true;
+                                              });
+                                              edit_user();
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 45,
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xff0c488d),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          14)),
+                                              child: Center(
+                                                  child: Text(
+                                                "บันทึก",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20),
+                                              )),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -356,7 +367,7 @@ class _EditProfileState extends State<EditProfile> {
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
                 border: Border.all(width: 2, color: Colors.deepPurple),
-                color: Colors.grey.withOpacity(0.5)),
+                color: Colors.grey),
             child: Center(
               child: CircularProgressIndicator(
                 color: Colors.deepPurple,
